@@ -1,31 +1,60 @@
 import express from "express";
-import ffmpeg from "fluent-ffmpeg";
+import {
+  convertVideo,
+  deleteProcessedVideo,
+  deleteRawVideo,
+  downloadRawVideo,
+  setupDirectories,
+  uploadProcessedVideo,
+} from "./cloudStorage";
 
+setupDirectories();
 const app = express();
 app.use(express.json());
 
-app.post("/process-video", (req, res) => {
-  //Get path of input video from request body
-  const inputFilePath = req.body.inputFilePath;
-  const outputFilePath = req.body.outputFilePath;
+app.post("/process-video", async (req, res) => {
+  let data;
+  try {
+    const message = Buffer.from(req.body.message.data, "base64").toString(
+      "utf8"
+    );
+    data = JSON.parse(message);
+    if (!data.name) {
+      throw new Error("Invalid message payload received.");
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(400).send("Bad Request: missing filename");
+  }
+  const inputFileName = data.name;
+  const outputFileName = `processed-${inputFileName}`;
 
-  if (!inputFilePath) {
-    res.status(400).send("Bad Request: Missing file input");
-  } else if (!outputFilePath) {
-    res.status(400).send("Bad Request: Missing file output");
+  //Download raw video from cloud storage
+  await downloadRawVideo(inputFileName);
+
+  //Convert video to 360p
+  try {
+    await convertVideo(inputFileName, outputFileName);
+  } catch (err) {
+    await Promise.all([
+      deleteRawVideo(inputFileName),
+      deleteProcessedVideo(outputFileName),
+    ]);
+    console.log(err);
+    return res
+      .status(500)
+      .send("Internal Server Error: video processing failed. ");
   }
 
-  ffmpeg(inputFilePath)
-    .outputOptions("-vf", "scale=-1:360") //360p
-    .on("end", function () {
-      console.log("Processing finished successfully");
-      res.status(200).send("Processing finished successfully.");
-    })
-    .on("error", function (err: any) {
-      console.log(`An error occurred: ${err.message}`);
-      res.status(500).send(`Internal Server Error: ${err.message}`);
-    })
-    .save(outputFilePath);
+  //Upload processed video to cloud storage
+  await uploadProcessedVideo(outputFileName);
+
+  await Promise.all([
+    deleteRawVideo(inputFileName),
+    deleteProcessedVideo(outputFileName),
+  ]);
+
+  return res.status(200).send("Processing finished successfully");
 });
 
 const port = process.env.PORT || 3000;
