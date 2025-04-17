@@ -11,7 +11,7 @@ import {
 setupDirectories();
 const app = express();
 app.use(express.json());
-
+//Do not return res directly to avoid bug
 app.post("/process-video", async (req, res) => {
   let data;
   try {
@@ -24,7 +24,8 @@ app.post("/process-video", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    return res.status(400).send("Bad Request: missing filename");
+    res.status(400).send("Bad Request: missing filename");
+    return;
   }
   const inputFileName = data.name;
   const outputFileName = `processed-${inputFileName}`;
@@ -41,9 +42,8 @@ app.post("/process-video", async (req, res) => {
       deleteProcessedVideo(outputFileName),
     ]);
     console.log(err);
-    return res
-      .status(500)
-      .send("Internal Server Error: video processing failed. ");
+    res.status(500).send("Internal Server Error: video processing failed. ");
+    return;
   }
 
   //Upload processed video to cloud storage
@@ -54,7 +54,8 @@ app.post("/process-video", async (req, res) => {
     deleteProcessedVideo(outputFileName),
   ]);
 
-  return res.status(200).send("Processing finished successfully");
+  res.status(200).send("Processing finished successfully");
+  return;
 });
 
 const port = process.env.PORT || 3000;
