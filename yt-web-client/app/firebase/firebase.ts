@@ -13,11 +13,15 @@ import {
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyC3bixl9f5d-3Bp_7QOfAq6OhXonk8ypAM",
-  authDomain: "yt-clone-5c28e.firebaseapp.com",
-  projectId: "yt-clone-5c28e",
-  appId: "1:897930248838:web:01b113c62ea476aca7c707",
-  measurementId: "G-WSYVLZ74E6",
+  apiKey: process.env.FIREBASE_API,
+
+  authDomain: process.env.AUTH_DOMAIN,
+
+  projectId: process.env.PROJECT_ID,
+
+  appId: process.env.FIREBASE_APP_ID,
+
+  measurementId: process.env.MEASUREMENT_ID,
 };
 
 // Initialize Firebase
