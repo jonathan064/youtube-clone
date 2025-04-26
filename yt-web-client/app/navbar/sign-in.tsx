@@ -2,7 +2,6 @@
 
 import { Fragment } from "react";
 import { signInWithGoogle, signOut } from "../firebase/firebase";
-
 import styles from "./sign-in.module.css";
 
 export default function SignIn() {
@@ -12,7 +11,7 @@ export default function SignIn() {
         Sign Out
       </button>
       <button className={styles.signin} onClick={signInWithGoogle}>
-        Sign Out
+        Sign In
       </button>
     </Fragment>
   );

@@ -7,21 +7,23 @@ import {
   onAuthStateChanged,
   User,
 } from "firebase/auth";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
 const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API,
 
-  authDomain: process.env.AUTH_DOMAIN,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
 
-  projectId: process.env.PROJECT_ID,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
 
-  appId: process.env.FIREBASE_APP_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 
-  measurementId: process.env.MEASUREMENT_ID,
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
