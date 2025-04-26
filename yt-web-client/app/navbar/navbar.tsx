@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./navbar.module.css";
+import SignIn from "./sign-in";
 
 export default function Navbar() {
   return (
@@ -13,6 +14,7 @@ export default function Navbar() {
           alt="YouTube Logo"
         ></Image>
       </Link>
+      <SignIn></SignIn>
     </nav>
   );
 }
