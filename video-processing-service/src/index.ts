@@ -36,10 +36,12 @@ app.post("/process-video", async (req, res) => {
     res.status(400).send(`Bad Request: video already processing or processed`);
     return;
   } else {
+    let d = new Date();
+    let uploadDate = d.toDateString();
     await setVideo(videoId, {
       id: videoId,
       uid: videoId.split("-")[0],
-      date: videoId.split("-")[1],
+      date: uploadDate,
       status: "processing",
     });
   }
