@@ -4,7 +4,6 @@ import React, { Fragment } from "react";
 import { uploadVideo } from "../firebase/functions";
 
 import styles from "./upload.module.css";
-import { handleWebpackExternalForEdgeRuntime } from "next/dist/build/webpack/plugins/middleware-plugin";
 
 export default function Upload() {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
