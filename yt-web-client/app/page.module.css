@@ -1,9 +1,22 @@
 .thumbnail {
-  margin: 10px;
+  width: 400px;
+  height: 300px;
 }
 
 .wrapper {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 200px;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(400px, 1fr)
+  ); /* Creates a responsive grid layout */
+  grid-row-gap: 20px; /* Sets 15px gap between rows */
+  grid-column-gap: 20px;
+  padding: 10px;
+}
+
+.item {
+  background-color: #f0f0f0; /* Light gray background for grid items */
+  border: 1px solid #ccc; /* Adds a border around grid items */
+  border-radius: 8px;
+  text-align: center; /* Centers text within grid items */
 }

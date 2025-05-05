@@ -5,7 +5,6 @@ import * as logger from "firebase-functions/logger";
 import { Storage } from "@google-cloud/storage";
 import { onCall } from "firebase-functions/v2/https";
 
-
 // Start writing functions
 // https://firebase.google.com/docs/functions/typescript
 
@@ -18,13 +17,13 @@ const rawVideoBucketName = "064-yt-raw-videos";
 const videoCollectionId = "videos";
 
 export interface Video {
-  id?: string,
-  uid?: string,
-  filename?: string,
-  status?: "processing" | "processed",
-  title?: string,
-  description?: string,
-  date?: string
+  id?: string;
+  uid?: string;
+  filename?: string;
+  status?: "processing" | "processed";
+  title?: string;
+  description?: string;
+  date?: string;
 }
 
 export const createUser = functions.auth.user().onCreate((user) => {
@@ -32,7 +31,7 @@ export const createUser = functions.auth.user().onCreate((user) => {
     uid: user.uid,
     email: user.email,
     photoUrl: user.photoURL,
-    displayName: user.displayName,
+    displayName: user.displayName
   };
 
   // If doc doesnt exist it will create one
@@ -63,15 +62,14 @@ export const generateUploadUrl = onCall(
     const [url] = await bucket.file(fileName).getSignedUrl({
       version: "v4",
       action: "write",
-      expires: Date.now() + 15 * 60 * 1000, // 15 minutes
+      expires: Date.now() + 15 * 60 * 1000 // 15 minutes
     });
 
     return { url, fileName };
   }
 );
 
-export const getVideos= onCall({maxInstances: 1},async () => 
-{
+export const getVideos = onCall({ maxInstances: 1 }, async () => {
   const snapshot = await db.collection(videoCollectionId).limit(10).get();
-  return snapshot.docs.map((doc)=> doc.data())
+  return snapshot.docs.map((doc) => doc.data());
 });

@@ -5,7 +5,7 @@ import {
   deleteRawVideo,
   downloadRawVideo,
   setupDirectories,
-  uploadProcessedVideo,
+  uploadProcessedVideo
 } from "./cloudStorage";
 import { isVideoNew, setVideo } from "./firestore";
 
@@ -42,7 +42,7 @@ app.post("/process-video", async (req, res) => {
       id: videoId,
       uid: videoId.split("-")[0],
       date: uploadDate,
-      status: "processing",
+      status: "processing"
     });
   }
 
@@ -55,7 +55,7 @@ app.post("/process-video", async (req, res) => {
   } catch (err) {
     await Promise.all([
       deleteRawVideo(inputFileName),
-      deleteProcessedVideo(outputFileName),
+      deleteProcessedVideo(outputFileName)
     ]);
     console.log(err);
     res.status(500).send("Internal Server Error: video processing failed. ");
@@ -66,12 +66,12 @@ app.post("/process-video", async (req, res) => {
   await uploadProcessedVideo(outputFileName);
   await setVideo(videoId, {
     status: "processed",
-    filename: outputFileName,
+    filename: outputFileName
   });
 
   await Promise.all([
     deleteRawVideo(inputFileName),
-    deleteProcessedVideo(outputFileName),
+    deleteProcessedVideo(outputFileName)
   ]);
 
   res.status(200).send("Processing finished successfully");

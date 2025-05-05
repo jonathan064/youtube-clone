@@ -2,7 +2,6 @@ import styles from "./page.module.css";
 import { getVideos } from "./firebase/functions";
 import Link from "next/link";
 import Image from "next/image";
-import { Fragment } from "react";
 
 export default async function Home() {
   const videos = await getVideos();
@@ -11,13 +10,14 @@ export default async function Home() {
     <main>
       <div className={styles.wrapper}>
         {videos.map((video) => (
-          <div>
+          <div key={video.id} className={styles.item}>
             <Link href={`/watch?v=${video.filename}`}>
               <Image
                 src={"/thumbnail.png"}
                 alt="video"
-                width={300}
-                height={200}
+                width={400}
+                height={230}
+                style={{ borderRadius: 8 }}
               ></Image>
             </Link>
             <h1>{video.date}</h1>
